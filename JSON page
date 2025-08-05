@@ -1,0 +1,27 @@
+import static spark.Spark.*;
+
+public class LoginServer {
+    public static void main(String[] args) {
+        port(4567);
+
+        post("/login", (req, res) -> {
+            JSONObject requestJson = new JSONObject(req.body());
+            String username = requestJson.optString("username");
+            String password = requestJson.optString("password");
+
+            JSONObject responseJson = new JSONObject();
+
+            // Exemplo simples: usuário e senha fixos
+            if ("admin".equals(username) && "1234".equals(password)) {
+                responseJson.put("status", "success");
+                responseJson.put("message", "Login realizado com sucesso!");
+            } else {
+                responseJson.put("status", "error");
+                responseJson.put("message", "Usuário ou senha inválidos.");
+            }
+
+            res.type("application/json");
+            return responseJson.toString();
+        });
+    }
+}
